@@ -1,0 +1,32 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WalletWatcher</title>
+    <link rel="stylesheet" href="{% static 'main/styles.css'%}">
+    <link rel="stylesheet" href="{% static 'main/style.css'%}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    
+</head>
+<body>
+    <nav class="shadow-lg p-5">
+        <div class="contain flex flex-wrap justify-between items-center mx-auto">
+            <a href="#" class="flex">
+                <img class="h-10 m-3"src="{%static 'main/images/wallet.png'%}" alt="">
+                <span class="self-center text-xl semibold">WalletWatcher</span>
+                {%if request.user.is_authenticated%}
+                <div class="flex flex-end">
+                <a href="{%url 'logout'%}" class="mr-10 my-8">Logout</a>
+                {%else%}
+                <a href="{%url 'login'%}" class="sy-8">Login</a>
+                </div>
+                {%endif%}
+            </a>
+            <div>
+    </nav>
+</body>
+{%block body%}
+{%endblock%}
+</html>

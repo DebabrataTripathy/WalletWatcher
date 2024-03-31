@@ -1,0 +1,255 @@
+
+{% extends 'main/base.html' %}
+{%load static%}
+{%load humanize%}
+{%block body%}
+
+    <div class="m-10 font-bold">Add expense➕</div>
+<div>
+<form class="shadow-lg m-10 rounded-lg px-10 py-10 "method="POST">
+    {%csrf_token%}
+    <div class="form-container flex">
+            <div class="mx-10">
+            <div class="mb-5">
+                <label class="">Expense Name</label>
+            </div>
+            <div class="border rounded">
+                {{form.name}}
+            </div>
+        </div>
+            <div class="mx-10">
+            <div class="mb-5">
+                <label class="">Price</label>
+            </div>
+            <div class="border rounded">
+                {{form.price}}
+            </div>
+        </div>
+            <div class="mx-10">
+            <div class="mb-5">
+                <label class="">Category</label>
+            </div>
+            <div class="border rounded">
+                {{form.category}}
+            </div>
+            
+        </div>
+
+        <div class="mx-10">
+            <div class="mb-5">
+                <label class="">Date</label>
+            </div>
+            <div class="border rounded">
+                {{form.date}}
+            </div>
+            
+        </div>
+        <div>
+            <button class="bg-green-500 px-5 py-2 rounded-lg text-white font-bold mt-8">Add</button>
+        </div>
+    
+</form>
+
+</div>
+<div class="m-10 font-bold">Expenses💵</div>
+    <div class="shadow-lg m-10 rounded-lg">
+    <div class="expense-header flex flex-wrap space-x-40 ">
+        <span>Name</span>
+        <span>Price</span>
+        <span>Category</span>
+        <span>Date</span>
+        <span><a class="font-bold" href="">Edit</a></span>
+        <span><a class="font-bold" href="">Delete</a></span>
+    </div>
+    <hr class="mb-10">
+    {%for expense in expenses%}
+    <div class="expense-row flex flex-wrap space-x-40 ">
+        <span class="font-bold">{{expense.name}}</span>
+        <span class="font-bold">{{expense.price|intcomma}}</span>
+        <span class="font-bold">{{expense.category}}</span>
+        <span class="font-bold">{{expense.date}}</span>
+        <span class=""><a class="font-bold" href="{%url 'edit' expense.id%}"><center><img class="h-5"src="{%static 'main/images/edit.png'%}"></center></a></span>
+        <span class=""><a class="font-bold" href="{%url 'delete' expense.id%}"><center><img class="h-5"src="{%static 'main/images/delete.png'%}"></center></a></span>
+        
+
+    </div>
+    <br>
+    {%endfor%}
+</div>
+    </div>
+        <div class="flex">
+            <div class="w-1/4 shadow-lg ml-10 rounded-lg ">
+                <h1 class="m-10 font-bold text-grey-500">Total Amt spent till date</h1>
+                <h1 class="ml-10 my-5 text-2xl text-green-500 font-bold">{{sum|intcomma}}</h1>
+            </div>
+        <div class="w-1/4 shadow-lg ml-10 rounded-lg ">
+            <h1 class="m-10 font-bold text-grey-500">Amount spent in last 365 days</h1>
+            <h1 class="ml-10 my-5 text-2xl text-green-500 font-bold">{{sum1|intcomma}}</h1>
+        </div>
+
+        <div class="w-1/4 shadow-lg ml-10 rounded-lg ">
+            <h1 class="m-10 font-bold text-grey-500">Amount spent in last 30 days</h1>
+            <h1 class="ml-10 my-5 text-2xl text-green-500 font-bold">{{sum2|intcomma}}</h1>
+        </div>
+
+        <div class="w-1/4 shadow-lg ml-10 rounded-lg ">
+            <h1 class="m-10 font-bold text-grey-500">Amount spent in last 7 days</h1>
+            <h1 class="ml-10 my-5 text-2xl text-green-500 font-bold">{{sum3|intcomma}}</h1>
+        </div>
+        
+    </div>
+    <div class="flex">
+        <div class="w-1/2 shadow-lg m-10">
+            <div class="flex flex-wrap sx-40 font-bold px-20 py-5">
+                <span>Past 30 days expenses</span>
+            </div>
+            <hr>
+            <div id="30-day-table">
+                {%for sum in daily_sum%}
+                <div class="flex flex-wrap px-20 py-5">
+                    <span>{{sum.date}}</span>
+                </div>
+                <div class="flex flex-wrap px-20 py-5">
+                    <span class="text-green-500">{{sum.sum}}</span>
+                </div>
+                {%endfor%}
+            </div>
+
+            
+            </div>
+            
+
+            <div class="w-1/2 shadow-lg m-10">
+                <div class="flex flex-wrap sx-40 font-bold px-20 py-5">
+                    <span>Amount spent on various categories</span>
+                </div>
+                <hr>
+                <div id="cat-sum-table">
+                    {%for sum in category_sum%}
+                    <div class="flex flex-wrap px-20 py-5">
+                        <span>{{sum.category}}</span>
+                    </div>
+                    <div class="flex flex-wrap px-20 py-5">
+                        <span class="text-green-500">{{sum.sum}}</span>
+                    </div>
+                    {%endfor%}
+                </div>
+                </div>
+        </div>
+        <div class="flex">
+            <div class="w-1/2 h-1/2 shadow-lg ml-10">
+                <h1 class="m-10">Expenses Across categories</h1>
+                <canvas id="myChart" width="200" height="100"></canvas>
+
+            </div>
+        <div class="w-1/2 shadow-lg ml-10">
+            <h1 class="m-10">Daily expenses</h1>
+            <canvas id="myChart2" width="200" height="100"></canvas>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    const cat_sum_div=document.getElementById('cat-sum-table').getElementsByTagName('div');
+    console.log(cat_sum_div);
+    const cats=[];
+    const amts=[];
+
+    for(var i=0;i<cat_sum_div.length;i++)
+
+    {
+        if(i%2==1)
+        {
+            amts.push(parseFloat(cat_sum_div[i].innerText));
+        }
+        else{
+            cats.push(cat_sum_div[i].innerText)
+        }
+    }
+
+    console.log(cats);
+    console.log(amts);
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: cats,
+            datasets: [{
+                label: 'Amt spent',
+                data: (amts),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+           
+        }
+    });
+
+    const daily_sum_div=document.getElementById('30-day-table').getElementsByTagName('div');
+    console.log(cat_sum_div);
+    const date=[];
+    const amt=[];
+
+    for(var i=0;i<daily_sum_div.length;i++)
+
+    {
+        if(i%2==1)
+        {
+            date.push(parseFloat(daily_sum_div[i].innerText));
+        }
+        else{
+            amt.push(daily_sum_div[i].innerText)
+        }
+    }
+
+    var ctx2 = document.getElementById('myChart2').getContext('2d');
+    var myChart2 = new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: amt,
+            datasets: [{
+                label: 'Amt spent',
+                data: (date),
+                backgroundColor: [
+                    'rgba(54, 142, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+           
+        }
+    });
+    </script>
+
+{%endblock%}

@@ -1,0 +1,54 @@
+{% extends 'main/base.html'%}
+{%block body%}
+{%if messages%}
+{%for msg in messages%}
+{{msg}}
+{%endfor%}
+{%endif%}
+
+<div class="text-3xl text-blue-600 semi-bold flex justify-center mt-10">Register®️</div>
+<div class="flex justify-center">
+
+    <form action="" method="POST" class="shadow-lg m-10 w-1/2 ml-50 px-5">
+    {%csrf_token%}
+    <input class="justify-center">
+        <div class="mb-5">
+            <label class="py-2 px-3 mr-10 mt-2">Username</label>
+        </div>
+        <div class="bg-white shadow appearance-none border rounded py-2 px-3 mr-10 text-grey-600" style="outline:none;">
+            {{form.username}}
+        </div>
+    
+        <div class="mb-5">
+            <label class="py-2 px-3 mr-10 mt-2">Email</label>
+        </div>
+        <div class="bg-white shadow appearance-none border rounded py-2 px-3 mr-10 text-grey-600 ">
+            {{form.email}}
+        </div>
+
+        <div class="mb-5">
+            <label class="py-2 px-3 mr-10 mt-2">First name</label>
+        </div>
+        <div class="bg-white shadow appearance-none border rounded py-2 px-3 mr-10 text-grey-600 ">
+            {{form.first_name}}
+        </div>
+
+        <div class="mb-5">
+            <label class="py-2 px-3 mr-10 mt-2">Last name</label>
+        </div>
+        <div class="bg-white shadow appearance-none border rounded py-2 px-3 mr-10 text-grey-600 ">
+            {{form.last_name}}
+        </div>
+        <div class="mb-5">
+            <label class="py-2 px-3 mr-10 mt-2">Password</label>
+        </div>
+        <div class="bg-white shadow appearance-none border rounded py-2 px-3 mr-10 text-grey-600 ">
+            {{form.password}}
+        </div>
+        <div class="flex justify-center">
+            <button type="submit" class="bg-green-500 px-5 mt-10 py-2  rounded-lg mb-5">Register</button>
+        </div>
+    </form>
+    </div>
+
+{%endblock%}

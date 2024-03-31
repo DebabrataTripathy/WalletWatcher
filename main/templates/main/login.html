@@ -1,0 +1,39 @@
+{% extends 'main/base.html'%}
+{%block body%}
+
+<center><div>
+    {%if form.errors %}
+    <div class='error-container text-red-500 px-8 mt-2 mb-2 mt-2'>{{form.non_field_errors}}
+    {%endif%}
+    </div></center>
+<div class="text-3xl semi-bold flex justify-center mt-10">Login🔓</div>
+<div class="flex justify-center">
+<form action="" method="POST" class="shadow-lg m-10 w-1/3 px-5">
+{%csrf_token%}
+<div class="justify-center">
+    <div class="mb-5">
+        <label class="py-2 px-3 mr-10">Username</label>
+    </div>
+    <div class="bg-white shadow appearance-none border rounded py-2 px-3 mr-10 text-grey-600">
+        {{form.username}}
+    </div>
+
+
+    <div class="mb-5">
+        <label class="py-2 px-3 mr-10">Password</label>
+    </div>
+    <div class="bg-white shadow appearance-none border rounded py-2 px-3 mr-10 text-grey-600 ">
+        {{form.password}}
+    </div>
+    <div class="flex justify-center">
+        <button type="submit" class="bg-green-500 px-5 mt-10 py-2  rounded-lg mb-5">Login</button>
+    </div>
+
+</div>
+
+</form>
+
+</div>
+<center><a href="{%url 'register'%}" class=" w-1/4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">New User?Sign in now!😊</a>
+</center>
+{%endblock%}
